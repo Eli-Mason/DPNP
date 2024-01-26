@@ -5,7 +5,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
 
 # Scapy Import - For networking
-# from scapy import *
+# from scapy import * # (currently unusued)
 
 class DPNPRoot: # Root Class
 
@@ -16,6 +16,9 @@ class DPNPRoot: # Root Class
 
     RootKey = PrivateKey.public_key() # Public root key used for cryptographical confirmation of identity
 
+    def __init__(self):
+        pass
+    
     def checksign(self, signature, output):
         try:
             self.RootKey.verify(signature, output,
@@ -29,7 +32,7 @@ class DPNPRoot: # Root Class
         except:
             return False # Signature is invalid if exception is raised
 
-Root = DPNPRoot
+Root = DPNPRoot()
 
 class User:
     username = '@default'
@@ -53,6 +56,28 @@ class User:
         ),
         hashes.SHA256())
 
+def formUserCheck(username, key):
+    return f'{username} {key.decode()}'.encode()
 
+user_eli = User('@Eli_Mason') # Create a user with username "@Eli_Mason"
+user_hello = User('@HelloWorld') # Create a user with username "@HelloWorld"
 
-eli = User('@Eli-Mason') # Create a user with username "@Eli-Mason"
+# Confirm identities using root confirmations
+if Root.checksign(user_eli.identity_sign,
+               formUserCheck('@Eli_Mason', user_eli.public_key_read)):
+    print('yes!')
+else:
+    print('no!')
+
+if Root.checksign(user_eli.identity_sign,
+               formUserCheck('@HelloWorld', user_eli.public_key_read)):
+    print('yes!')
+else:
+    print('no!')
+
+if Root.checksign(user_hello.identity_sign,
+               formUserCheck('@HelloWorld', user_hello.public_key_read)):
+    print('yes!')
+else:
+    print('no!')
+
