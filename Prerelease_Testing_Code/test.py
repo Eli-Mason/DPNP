@@ -65,7 +65,7 @@ user_hello = User('@HelloWorld') # Create a user with username "@HelloWorld"
 # Confirm identities using root confirmations
 if Root.checksign(user_eli.identity_sign,
                formUserCheck('@Eli_Mason', user_eli.public_key_read)):
-    print('yes!')
+    print('yes!') # output will be "yes!" because identity signature, key, and username match
 else:
     print('no!')
 
@@ -73,11 +73,11 @@ if Root.checksign(user_eli.identity_sign,
                formUserCheck('@HelloWorld', user_eli.public_key_read)):
     print('yes!')
 else:
-    print('no!')
-
+    print('no!') # output will be "no!" because username is invalid
+    
 if Root.checksign(user_hello.identity_sign,
                formUserCheck('@HelloWorld', user_hello.public_key_read)):
-    print('yes!')
+    print('yes!') # output will be "yes!" because identity signature, key, and username match
 else:
     print('no!')
 
